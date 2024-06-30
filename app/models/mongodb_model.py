@@ -1,8 +1,11 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-class MongoCRUD:
-    def __init__(self, db_name, collection_name, uri="mongodb://localhost:27017/"):
+from config import settings
+from logging_config import models_logger
+
+class MongoCollection:
+    def __init__(self, db_name, collection_name, uri=settings.mongo_uri):
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
