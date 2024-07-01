@@ -1,65 +1,54 @@
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 
-from config import settings
-from logging_config import models_logger
+from ..config import settings
+from ..logging_config import models_logger
 
 class MongoCollection:
-    def __init__(self, db_name, collection_name, uri=settings.mongo_uri):
+    def __init__(self, collection_name, db_name=settings.mongo_db, uri=settings.mongo_uri):
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
-    def create_document(self, document):
-        result = self.collection.insert_one(document)
-        return str(result.inserted_id)
+    def create_document(self, document: dict):
+        try:
+            models_logger.debug(f"Type: {type(document)} Creating document: {document}")
+            result = self.collection.insert_one(document)
+            models_logger.debug(f"Document created with id: {result.inserted_id}")
+            return str(result.inserted_id)
+        except Exception as e:
+            models_logger.error(f"Error creating document: {e}")
+            raise e
 
-    def retrieve_document_by_id(self, doc_id):
-        document = self.collection.find_one({"_id": ObjectId(doc_id)})
-        return document
+    def retrieve_document_by_id(self, doc_id: str):
+        try:
+            document = self.collection.find_one({"_id": doc_id})
+            return document
+        except Exception as e:
+            models_logger.error(f"Error retrieving document: {e}")
 
-    def delete_document(self, doc_id):
-        result = self.collection.delete_one({"_id": ObjectId(doc_id)})
-        return result.deleted_count > 0
+    def delete_document(self, doc_id: str):
+        try:
+            result = self.collection.delete_one({"_id": doc_id})
+            return result.deleted_count > 0
+        except Exception as e:
+            models_logger.error(f"Error deleting document: {e}")
+            raise e
 
-    def edit_document_by_id(self, doc_id, new_document):
-        result = self.collection.replace_one({"_id": ObjectId(doc_id)}, new_document)
-        return result.modified_count > 0
+    def edit_document_by_id(self, doc_id: str, new_document):
+        try:
+            result = self.collection.replace_one({"_id": doc_id}, new_document)
+            return result.modified_count > 0
+        except Exception as e:
+            models_logger.error(f"Error editing document: {e}")
+            raise e
 
-    def retrieve_documents_by_fields(self, query):
-        documents = self.collection.find(query)
-        return list(documents)
+    def retrieve_documents_by_fields(self, query: dict):
+        try:
+            documents = self.collection.find(query)
+            return list(documents)
+        except Exception as e:
+            models_logger.error(f"Error retrieving documents: {e}")
+            raise e
 
-# Example usage
-if __name__ == "__main__":
-    db_name = "test_db"
-    collection_name = "test_collection"
-
-    mongo_crud = MongoCRUD(db_name, collection_name)
-
-    # Create a document
-    document = {"name": "John Doe", "age": 30, "email": "john.doe@example.com"}
-    doc_id = mongo_crud.create_document(document)
-    print(f"Document created with ID: {doc_id}")
-
-    # Retrieve the document by ID
-    retrieved_doc = mongo_crud.retrieve_document_by_id(doc_id)
-    print("Retrieved Document:", retrieved_doc)
-
-    # Edit the document by ID
-    new_document = {"name": "Jane Doe", "age": 25, "email": "jane.doe@example.com"}
-    is_edited = mongo_crud.edit_document_by_id(doc_id, new_document)
-    print(f"Document edited: {is_edited}")
-
-    # Retrieve the edited document by ID
-    edited_doc = mongo_crud.retrieve_document_by_id(doc_id)
-    print("Edited Document:", edited_doc)
-
-    # Retrieve documents by any given field(s)
-    query = {"name": "Jane Doe"}
-    found_docs = mongo_crud.retrieve_documents_by_fields(query)
-    print("Documents found with query:", found_docs)
-
-    # Delete the document
-    is_deleted = mongo_crud.delete_document(doc_id)
-    print(f"Document deleted: {is_deleted}")
+agents_collection = MongoCollection("agents")
+conversations_collection = MongoCollection("conversations")
