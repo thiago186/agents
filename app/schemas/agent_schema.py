@@ -6,13 +6,12 @@ import uuid
 
 from pydantic import AliasChoices, BaseModel, Field, ConfigDict
 
-
 class LLMModels(Enum):
+    """Supported LLM models for an agent"""
     gpt3_5_turbo = "gpt-3.5-turbo"
     gpt4 = "gpt-4"
     gpt4_turbo = "gpt-4-turbo"
     gpt4o = "gpt-4o"
-
 
 class AgentSchema(BaseModel):
     model_config = ConfigDict(use_enum_values=True)

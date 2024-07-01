@@ -1,7 +1,7 @@
 import pytest
 from uuid import uuid4
 
-from ..schemas import AgentSchema
+from ..schemas.agent_schema import AgentSchema
 
 @pytest.fixture(scope="session")
 def _agent():
@@ -13,3 +13,7 @@ def _agent():
         system_prompt='Hello!'
 
     )
+
+@pytest.fixture(scope="session")
+def _conversation():
+    return 

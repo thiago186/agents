@@ -7,3 +7,5 @@ def test_agent_schema(_agent):
     assert _agent.llm_model == 'gpt-3.5-turbo'
     assert _agent.agent_name in ['My Agent', 'Edited Test Agent']
     assert _agent.system_prompt == 'Hello!'
+
+def test_conversation_schema(_conversation):
