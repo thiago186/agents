@@ -19,6 +19,7 @@ class MessageSchema(BaseModel):
     """The schema for a single message"""
     model_config = ConfigDict(use_enum_values=True)
     id: str = Field(default_factory= None, alias=AliasChoices('id', '_id', 'id_'), serialization_alias='_id')
+    user_id: str
     conversation_id: str
     content: str
     message_type: MessageType
