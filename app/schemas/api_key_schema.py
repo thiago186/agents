@@ -6,7 +6,7 @@ from uuid import uuid4
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from .config_dict_schema import gen_config_dict
+from app.schemas.config_dict_schema import gen_config_dict
 
 
 class APIKeyRole(str, Enum):

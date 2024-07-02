@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from .config import settings
+from app.config import settings
 
 class CustomJsonFormatter(logging.Formatter):
     def format(self, record):

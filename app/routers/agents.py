@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends
 
-
 agents_router = APIRouter(
     prefix="/agents",
     tags=["agents"],

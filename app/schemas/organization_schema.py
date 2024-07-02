@@ -6,9 +6,9 @@ from enum import Enum
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from .users_schema import UserInDbSchema
-from .api_key_schema import APIKeySchema
-from .config_dict_schema import gen_config_dict
+from app.schemas.users_schema import UserInDbSchema
+from app.schemas.api_key_schema import APIKeySchema
+from app.schemas.config_dict_schema import gen_config_dict
 
 class OrganizationRoles(str, Enum):
     """ 

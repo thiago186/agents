@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
-from ..config import settings
-from ..logging_config import models_logger
+from app.config import settings
+from app.logging_config import models_logger
 
 class MongoCollection:
     def __init__(self, collection_name, db_name=settings.mongo_db, uri=settings.mongo_uri):
