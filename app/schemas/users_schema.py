@@ -9,6 +9,7 @@ from pydantic import AliasChoices, BaseModel, Field, ConfigDict
 
 from app.models.bcrypt_model import bcrypt_manager
 
+
 class UserSchema(BaseModel):
     """Base schema for a user. It doesn't contain hashed password field"""
 
@@ -21,7 +22,7 @@ class UserSchema(BaseModel):
     email: str
     username: str
     first_name: str
-    password: Optional[str] = None
+    password: Optional[str] = Field(default=None, exclude=True)
     hashed_password: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -36,14 +37,13 @@ class UserSchema(BaseModel):
         self.password = None
 
 
-
 if __name__ == "__main__":
     user = UserSchema(
         id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         email="email@email.com",
         username="username",
         first_name="First Name",
-        password="test_password"
+        password="test_password",
     )
 
     print(user.model_dump())

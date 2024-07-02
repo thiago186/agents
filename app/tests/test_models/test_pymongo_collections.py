@@ -1,6 +1,5 @@
 """This module contains all tests for the MongoDB collections in the application"""
 
-import pytest
 from pymongo import MongoClient
 from uuid import uuid4
 from unittest.mock import patch, MagicMock

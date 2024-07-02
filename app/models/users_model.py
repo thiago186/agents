@@ -21,7 +21,7 @@ class UsersCollection(MongoCollection):
 
         if not user.hashed_password:
             user.hash_password()
-        user_id = self.create_document(user.model_dump())
+        user_id = self.create_document(user.model_dump(by_alias=True))
         return user_id
 
     def retrieve_user_by_id(self, user_id: str) -> UserSchema:
@@ -32,6 +32,15 @@ class UsersCollection(MongoCollection):
             return UserSchema(**document)
 
         raise ValueError(f"User with id {user_id} not found")
+    
+    def update_user(self, user: UserSchema) -> bool:
+        """Update a user in the database"""
+
+        if not isinstance(user, UserSchema):
+            raise ValueError("User must be an instance of UserSchema")
+
+        result = self.edit_document_by_id(user.id, user.model_dump(by_alias=True))
+        return result
 
 
 userCollection = UsersCollection()
