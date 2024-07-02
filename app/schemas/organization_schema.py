@@ -6,7 +6,6 @@ from enum import Enum
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from app.schemas.users_schema import UserInDbSchema
 from app.schemas.api_key_schema import APIKeySchema
 from app.schemas.config_dict_schema import gen_config_dict
 
@@ -44,14 +43,6 @@ if __name__ == "__main__":
         id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         organization_name="Test Organization",
         owner_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
-        members=[
-            UserInDbSchema(
-                id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
-                email="email@email.com",
-                username="username",
-                first_name="First Name",
-                hashed_password="dadas"
-        )
-        ]
+        members=["e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"]
     )
     print(organization.model_dump())

@@ -7,7 +7,9 @@ import uuid
 
 from pydantic import AliasChoices, BaseModel, Field, ConfigDict
 
-class UserBaseSchema(BaseModel):
+from app.models.bcrypt_model import bcrypt_manager
+
+class UserSchema(BaseModel):
     """Base schema for a user. It doesn't contain hashed password field"""
 
     model_config = ConfigDict(use_enum_values=True)
@@ -20,16 +22,22 @@ class UserBaseSchema(BaseModel):
     username: str
     first_name: str
     password: Optional[str] = None
+    hashed_password: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class UserInDbSchema(UserBaseSchema):
-    """Schema for a user in the database"""
+    def __init__(self, **data):
+        super().__init__(**data)
+        if self.hashed_password is None and self.password is not None:
+            self.hash_password()
 
-    hashed_password: str
+    def hash_password(self):
+        """Hash the password and set it to the hashed_password attribute"""
+        self.hashed_password = bcrypt_manager.hash_password(self.password)
+
 
 
 if __name__ == "__main__":
-    user = UserBaseSchema(
+    user = UserSchema(
         id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         email="email@email.com",
         username="username",

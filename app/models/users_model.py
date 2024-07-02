@@ -2,12 +2,7 @@
 
 from datetime import datetime, timezone
 
-import bcrypt
-
-from app.schemas.users_schema import UserInDbSchema
 from app.models.mongodb_model import MongoCollection
-
-
 
 
 class UsersCollection(MongoCollection):
@@ -15,6 +10,7 @@ class UsersCollection(MongoCollection):
 
     def __init__(self):
         super().__init__("users")
+
 
 
 userCollection = UsersCollection()
