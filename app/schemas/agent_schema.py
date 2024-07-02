@@ -1,14 +1,14 @@
 """This module contains the schemas for a LLM agent"""
 
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import Optional
 from enum import Enum
 import uuid
 
-from pydantic import AliasChoices, BaseModel, Field, ConfigDict
+from pydantic import AliasChoices, BaseModel, Field
 
-from .conversation_schema import ConversationSchema
-from .message_schemas import MessageSchema
+from .config_dict_schema import gen_config_dict
+
 
 class LLMModels(Enum):
     """Supported LLM models for an agent"""
@@ -20,7 +20,7 @@ class LLMModels(Enum):
 
 
 class AgentSchema(BaseModel):
-    model_config = ConfigDict(use_enum_values=True)
+    model_config = gen_config_dict
     id: str = Field(
         default_factory=None,
         alias=AliasChoices("id", "_id", "id_"),

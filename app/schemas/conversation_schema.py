@@ -5,9 +5,10 @@ from enum import Enum
 from typing import List, Optional
 from uuid import uuid4
 
-from pydantic import AliasChoices, BaseModel, Field, ConfigDict
+from pydantic import AliasChoices, BaseModel, Field
 
 from .message_schemas import MessageSchema
+from .config_dict_schema import gen_config_dict
 
 
 class ConversationStatus(str, Enum):
@@ -21,6 +22,7 @@ class ConversationStatus(str, Enum):
 class ConversationSchema(BaseModel):
     """The schema for a conversation"""
 
+    model_config = gen_config_dict
     id: str = Field(
         default_factory=None,
         alias=AliasChoices("id", "_id", "id_"),
@@ -35,8 +37,6 @@ class ConversationSchema(BaseModel):
     status: Optional[ConversationStatus] = None
     max_duration: Optional[int] = None
     messages: List[MessageSchema] = []
-
-    model_config = ConfigDict(use_enum_values=True)
 
     def __init__(self, **data):
         super().__init__(**data)
@@ -54,6 +54,7 @@ class ConversationSchema(BaseModel):
 
 if __name__ == "__main__":
     from .message_schemas import MessageType
+
     conversation = ConversationSchema(
         id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         agent_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
@@ -65,10 +66,9 @@ if __name__ == "__main__":
                 conversation_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
                 user_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
                 content="Hello!",
-                message_type=MessageType.chat
+                message_type=MessageType.chat,
             )
         ],
     )
     print(type(conversation.model_dump()))
     print(conversation.model_dump())
-    # Output: {'id_': '123

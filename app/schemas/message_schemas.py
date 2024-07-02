@@ -2,10 +2,12 @@
 
 from datetime import datetime, timezone
 from enum import Enum
-from typing import List, Optional
+from typing import Optional
 from uuid import uuid4
 
-from pydantic import AliasChoices, BaseModel, Field, ConfigDict
+from pydantic import AliasChoices, BaseModel, Field
+
+from .config_dict_schema import gen_config_dict
 
 
 class MessageType(str, Enum):
@@ -27,7 +29,7 @@ class MessageRole(str, Enum):
 class MessageSchema(BaseModel):
     """The schema for a single message"""
 
-    model_config = ConfigDict(use_enum_values=True)
+    model_config = gen_config_dict
     id: str = Field(
         default_factory=None,
         alias=AliasChoices("id", "_id", "id_"),

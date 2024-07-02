@@ -1,11 +1,12 @@
 """This module contains the API key schema for the applicaiton"""
 
 from datetime import datetime, timezone
-from typing import List, Optional
 from enum import Enum
 from uuid import uuid4
 
-from pydantic import AliasChoices, BaseModel, Field, ConfigDict
+from pydantic import AliasChoices, BaseModel, Field
+
+from .config_dict_schema import gen_config_dict
 
 
 class APIKeyRole(str, Enum):
@@ -13,16 +14,18 @@ class APIKeyRole(str, Enum):
 
     admin = "admin"
 
+
 class APIKeyStatus(str, Enum):
     """Supported statuses for API keys"""
 
     active = "active"
     revoked = "revoked"
 
+
 class APIKeySchema(BaseModel):
     """Schema for an API key in the database"""
 
-    model_config = ConfigDict(use_enum_values=True)
+    model_config = gen_config_dict
     id: str = Field(
         default_factory=lambda: str(uuid4()),
         alias=AliasChoices("id", "_id", "id_"),
@@ -43,9 +46,12 @@ class APIKeySchema(BaseModel):
         """Get the status of the API key"""
         return self.key_status == APIKeyStatus.active.value
 
+
 class NewAPIKeySchema(BaseModel):
     """Schema for creating a new API key"""
-    
+
+    model_config = gen_config_dict
+
     role: APIKeyRole = APIKeyRole.admin.value
     key_status: APIKeyStatus = APIKeyStatus.active.value
 
@@ -54,20 +60,19 @@ class NewAPIKeySchema(BaseModel):
 
     def get_api_key(self):
         """Get the API Key"""
-        #TODO: Implement the logic to generate the API key
+        # TODO: Implement the logic to generate the API key
         key_dict = self.model_dump()
         key_dict["hashed_key"] = "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"
         key_dict["final_chars"] = "fc4e7"
         api_key = "temp_api_key"
         return APIKeySchema(**key_dict), api_key
-        
-    
+
 
 if __name__ == "__main__":
     new_api_key = NewAPIKeySchema(
         created_by="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         organization_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
-        role=APIKeyRole.admin
+        role=APIKeyRole.admin,
     )
 
     print(new_api_key.model_dump())

@@ -1,14 +1,14 @@
 """This module contains the schemas for an organization"""
 
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import List
 from enum import Enum
-import uuid
 
-from pydantic import AliasChoices, BaseModel, Field, ConfigDict
+from pydantic import AliasChoices, BaseModel, Field
 
 from .users_schema import UserInDbSchema
 from .api_key_schema import APIKeySchema
+from .config_dict_schema import gen_config_dict
 
 class OrganizationRoles(str, Enum):
     """ 
@@ -27,7 +27,7 @@ class OrganizationRoles(str, Enum):
 class OrganizationSchema(BaseModel):
     """Schema for a organization in the database."""
 
-    model_config = ConfigDict(use_enum_values=True)
+    model_config = gen_config_dict
     id: str = Field(
         default_factory=None,
         alias=AliasChoices("id", "_id", "id_"),
