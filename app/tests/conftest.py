@@ -3,8 +3,11 @@ from uuid import uuid4
 from datetime import datetime
 
 from ..schemas.agent_schema import AgentSchema, LLMModels
+from ..schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
 from ..schemas.conversation_schema import ConversationSchema
 from ..schemas.message_schemas import MessageSchema, MessageRole, MessageType
+from ..schemas.organization_schema import OrganizationSchema, OrganizationRoles
+
 
 @pytest.fixture(scope="session")
 def _agent():
@@ -38,4 +41,28 @@ def _conversation(_message):
         user_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
         organization_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
         messages=[_message],
+    )
+
+@pytest.fixture(scope="session")
+def _api_key():
+    return APIKeySchema(
+        id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
+        organization_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
+        hashed_key="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
+        role=APIKeyRole.admin,
+        key_status=APIKeyStatus.active,
+        created_by='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
+        final_chars="fc4e7",
+        created_at=datetime(2000, 1, 1)
+    )
+
+@pytest.fixture(scope="session")
+def _organization(_api_key):
+    return OrganizationSchema(
+        id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
+        organization_name='Test Organization',
+        organization_role=OrganizationRoles.admin,
+        api_keys=[_api_key],
+        members=['e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'],
+        owner_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'
     )

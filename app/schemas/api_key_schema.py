@@ -28,8 +28,8 @@ class APIKeySchema(BaseModel):
         alias=AliasChoices("id", "_id", "id_"),
         serialization_alias="_id",
     )
+    hashed_key: str
     key_status: APIKeyStatus = APIKeyStatus.active.value
-    key_hash: str
     role: APIKeyRole
     organization_id: str
     final_chars: str
@@ -56,7 +56,7 @@ class NewAPIKeySchema(BaseModel):
         """Get the API Key"""
         #TODO: Implement the logic to generate the API key
         key_dict = self.model_dump()
-        key_dict["key_hash"] = "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"
+        key_dict["hashed_key"] = "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"
         key_dict["final_chars"] = "fc4e7"
         api_key = "temp_api_key"
         return APIKeySchema(**key_dict), api_key

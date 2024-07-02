@@ -1,7 +1,7 @@
 import pytest
 
-from ..schemas.agent_schema import LLMModels
-from ..schemas.message_schemas import MessageSchema, MessageType, MessageRole
+from ...schemas.agent_schema import LLMModels
+from ...schemas.message_schemas import MessageSchema, MessageType, MessageRole
 
 def test_agent_schema(_agent):
 

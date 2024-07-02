@@ -36,7 +36,7 @@ class OrganizationSchema(BaseModel):
     organization_name: str
     owner_id: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    members: List[UserInDbSchema] = []
+    members: List[str] = []
     api_keys: List[APIKeySchema] = []
 
 if __name__ == "__main__":
