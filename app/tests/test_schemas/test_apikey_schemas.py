@@ -1,5 +1,4 @@
 from datetime import datetime
-import pytest
 
 from app.schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
 

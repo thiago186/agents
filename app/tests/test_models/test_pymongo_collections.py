@@ -5,8 +5,8 @@ from pymongo import MongoClient
 from uuid import uuid4
 from unittest.mock import patch, MagicMock
 
-from ...schemas.message_schemas import MessageSchema, MessageRole, MessageType
-from ...models.mongodb_model import agents_collection, conversations_collection
+from app.schemas.message_schemas import MessageSchema, MessageRole, MessageType
+from app.models.mongodb_model import agents_collection, conversations_collection
 
 
 def test_create_agent(_agent):

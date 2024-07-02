@@ -1,5 +1,3 @@
-import pytest
-
 from app.schemas.agent_schema import LLMModels
 from app.schemas.message_schemas import MessageSchema, MessageType, MessageRole
 

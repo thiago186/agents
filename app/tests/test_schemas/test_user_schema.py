@@ -1,5 +1,3 @@
-import pytest
-
 from app.schemas.users_schema import UserSchema
 from app.models.bcrypt_model import bcrypt_manager
 

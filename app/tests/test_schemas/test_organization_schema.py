@@ -1,5 +1,3 @@
-import pytest
-
 from app.schemas.api_key_schema import APIKeySchema
 from app.schemas.organization_schema import OrganizationSchema, OrganizationRoles
 
