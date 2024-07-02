@@ -1,7 +1,7 @@
 import pytest
 
-from ...schemas.api_key_schema import APIKeySchema
-from ...schemas.organization_schema import OrganizationSchema, OrganizationRoles
+from app.schemas.api_key_schema import APIKeySchema
+from app.schemas.organization_schema import OrganizationSchema, OrganizationRoles
 
 def test_organization_schema(_organization):
         

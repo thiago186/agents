@@ -3,6 +3,8 @@
 from datetime import datetime, timezone
 
 from app.models.mongodb_model import MongoCollection
+from app.logging_config import models_logger
+from app.schemas.users_schema import UserSchema
 
 
 class UsersCollection(MongoCollection):
@@ -11,10 +13,29 @@ class UsersCollection(MongoCollection):
     def __init__(self):
         super().__init__("users")
 
+    def create_user(self, user: UserSchema) -> str:
+        """Create a new user in the database"""
+
+        if not isinstance(user, UserSchema):
+            raise ValueError("User must be an instance of UserSchema")
+
+        if not user.hashed_password:
+            user.hash_password()
+        user_id = self.create_document(user.model_dump())
+        return user_id
+
+    def retrieve_user_by_id(self, user_id: str) -> UserSchema:
+        """Retrieve a user by its id"""
+
+        document = self.retrieve_document_by_id(user_id)
+        if document:
+            return UserSchema(**document)
+
+        raise ValueError(f"User with id {user_id} not found")
 
 
 userCollection = UsersCollection()
 
 if __name__ == "__main__":
-    print('hello!')
-    
+    print("hello!")
+

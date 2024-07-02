@@ -33,6 +33,7 @@ class UserSchema(BaseModel):
     def hash_password(self):
         """Hash the password and set it to the hashed_password attribute"""
         self.hashed_password = bcrypt_manager.hash_password(self.password)
+        self.password = None
 
 
 

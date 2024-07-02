@@ -1,7 +1,7 @@
 from datetime import datetime
 import pytest
 
-from ...schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
+from app.schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
 
 def test_api_key_schema(_api_key):
     

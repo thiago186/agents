@@ -2,11 +2,12 @@ import pytest
 from uuid import uuid4
 from datetime import datetime
 
-from ..schemas.agent_schema import AgentSchema, LLMModels
-from ..schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
-from ..schemas.conversation_schema import ConversationSchema
-from ..schemas.message_schemas import MessageSchema, MessageRole, MessageType
-from ..schemas.organization_schema import OrganizationSchema, OrganizationRoles
+from app.schemas.agent_schema import AgentSchema, LLMModels
+from app.schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
+from app.schemas.conversation_schema import ConversationSchema
+from app.schemas.message_schemas import MessageSchema, MessageRole, MessageType
+from app.schemas.organization_schema import OrganizationSchema, OrganizationRoles
+from app.schemas.users_schema import UserSchema
 
 
 @pytest.fixture(scope="session")
@@ -65,4 +66,15 @@ def _organization(_api_key):
         api_keys=[_api_key],
         members=['e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'],
         owner_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'
+    )
+
+@pytest.fixture(scope="session")
+def _user():
+    return UserSchema(
+        id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
+        email="email@email.com",
+        username='test_user',
+        first_name='Test',
+        password='test_password',
+        created_at=datetime(2000, 1, 1)
     )
