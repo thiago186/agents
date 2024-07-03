@@ -65,7 +65,28 @@ class APIKeysCollection(MongoCollection):
         except Exception as e:
             models_logger.error(e)
             raise e
+    
+    def is_valid_api_key(self, key: str, organization_id: str) -> bool:
+        """Check if an api_key is valid and active for an given organization"""
         
+        try:
+            api_keys = self.retrieve_organization_api_keys(organization_id, only_active_keys=True)
+            is_valid = any([apiHashManager.check_hash(key, api_key.hashed_key) for api_key in api_keys])
+            return is_valid
+        except Exception as e:
+            models_logger.error(e)
+            raise e
+        
+    def retrieve_organization_api_key(self, key: str, organization_id: str) -> APIKeySchema:
+        """Retrieve a given api_key for an organizaton"""
+
+        try:
+            api_keys = self.retrieve_organization_api_keys(organization_id)
+            for api_key in api_keys:
+                if apiHashManager.check_hash(key, api_key.hashed_key):
+                    return api_key
+        except:
+            return None
     def revoke_api_key(self, key: str) -> bool:
         """Revoke an api_key from the database"""
             
@@ -92,28 +113,5 @@ class APIKeysCollection(MongoCollection):
             models_logger.error(e)
             raise e    
     
-
-    def is_valid_api_key(self, key: str, organization_id: str) -> bool:
-        """Check if an api_key is valid and active for an given organization"""
-        
-        try:
-            api_keys = self.retrieve_organization_api_keys(organization_id, only_active_keys=True)
-            is_valid = any([apiHashManager.check_hash(key, api_key.hashed_key) for api_key in api_keys])
-            return is_valid
-        except Exception as e:
-            models_logger.error(e)
-            raise e
-        
-    def retrieve_api_key(self, key: str, organization_id: str) -> APIKeySchema:
-        """Retrieve a given api_key for an organizaton"""
-
-        try:
-            api_keys = self.retrieve_organization_api_keys(organization_id)
-            for api_key in api_keys:
-                if apiHashManager.check_hash(key, api_key.hashed_key):
-                    return api_key
-        except:
-            return None
-            
         
 apiKeysCollection = APIKeysCollection()
