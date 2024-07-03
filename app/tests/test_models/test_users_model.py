@@ -1,9 +1,30 @@
 from app.schemas.users_schema import UserSchema
 from app.models.users_model import userCollection
 from app.models.bcrypt_model import bcrypt_manager
+from app.exceptions import DuplicateUserException, UsersModelException
 
 def test_save_user(_user):
     user_id = userCollection.create_user(_user)
+
+def test_save_duplicate_user(_user):
+
+    try:
+        userCollection.create_user(_user)
+        assert False, "Expected an error for saving a duplicate user"
+    except Exception as e:
+        assert isinstance(e, DuplicateUserException)
+
+def test_save_invalid_user():
+    invalid_user = {
+        "_id" : "test_invalid_user",
+        "email" : "test_invalid_user"
+    }
+
+    try:
+        userCollection.create_user(invalid_user)
+        assert False, "Expected an error for saving an invalid user"
+    except Exception as e:
+        assert isinstance(e, UsersModelException)
 
 def test_retrieve_user(_user):
     user_id = _user.id

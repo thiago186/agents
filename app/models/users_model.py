@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from app.models.mongodb_model import MongoCollection
 from app.logging_config import models_logger
 from app.schemas.users_schema import UserSchema
+from app.exceptions import DuplicateUserException, UsersModelException
 
 
 class UsersCollection(MongoCollection):
@@ -14,10 +15,23 @@ class UsersCollection(MongoCollection):
         super().__init__("users")
 
     def create_user(self, user: UserSchema) -> str:
-        """Create a new user in the database"""
+        """
+        Create a new user in the database
+        Performs users duplicity validations
+        To be created, the user must have a hashed password, a valid and unique email
+        """
 
         if not isinstance(user, UserSchema):
-            raise ValueError("User must be an instance of UserSchema")
+            raise UsersModelException("User must be an instance of UserSchema")
+
+        #check for email field in user
+        if not user.email:
+            raise UsersModelException("User must have an email")
+        
+        #check for duplicate email
+        user_by_email = self.retrieve_documents_by_fields({"email": user.email})
+        if user_by_email:
+            raise DuplicateUserException()
 
         if not user.hashed_password:
             user.hash_password()
@@ -30,8 +44,6 @@ class UsersCollection(MongoCollection):
         document = self.retrieve_document_by_id(user_id)
         if document:
             return UserSchema(**document)
-
-        raise ValueError(f"User with id {user_id} not found")
     
     def update_user(self, user: UserSchema) -> bool:
         """Update a user in the database"""
