@@ -1,3 +1,5 @@
+from typing import List
+
 from app.models.mongodb_model import MongoCollection
 from app.models.api_hash_model import apiHashManager
 from app.schemas.api_key_schema import APIKeySchema, APIKeyStatus
@@ -29,17 +31,39 @@ class APIKeysCollection(MongoCollection):
             models_logger.error(e)
             raise e
         
-    def retrieve_api_key(self, key: str) -> APIKeySchema:
-        """Retrieve an api_key by its key"""
+    def retrieve_organization_api_keys(self, organization_id: str, only_active_keys: bool = False) -> List[APIKeySchema]:
+        """Retrieve all api_keys for an organization"""
         
         try:
-            hashed_key = apiHashManager.hash_api_key(key)
-            document = self.retrieve_documents_by_fields({"hashed_key": hashed_key})
-            if document:
-                return APIKeySchema(**document)
-            
+            query = {"organization_id": organization_id}
+            if only_active_keys:
+                query["key_status"] = APIKeyStatus.active.value
+            api_keys = self.retrieve_documents_by_fields(query)
+            return [APIKeySchema(**api_key) for api_key in api_keys]
+        
         except Exception as e:
-            models_logger.warning(e)
+            models_logger.error(e)
+            raise e
+        
+    def retrieve_user_api_keys(self, user_id: str, only_active_keys: bool = False) -> List[APIKeySchema]:
+        """
+        Retrieve all api_keys for a user
+
+        Args:
+            user_id (str): The user id
+            only_active_keys (bool, optional): If True, only active keys will be retrieved. Defaults to False.
+        """
+        
+        try:
+            query = {"created_by": user_id}
+            if only_active_keys:
+                query["key_status"] = APIKeyStatus.active.value
+
+            api_keys = self.retrieve_documents_by_fields(query)
+            api_keys = [APIKeySchema(**api_key) for api_key in api_keys]
+            return api_keys
+        except Exception as e:
+            models_logger.error(e)
             raise e
         
     def revoke_api_key(self, key: str) -> bool:
@@ -66,6 +90,30 @@ class APIKeysCollection(MongoCollection):
             return result
         except Exception as e:
             models_logger.error(e)
+            raise e    
+    
+
+    def is_valid_api_key(self, key: str, organization_id: str) -> bool:
+        """Check if an api_key is valid and active for an given organization"""
+        
+        try:
+            api_keys = self.retrieve_organization_api_keys(organization_id, only_active_keys=True)
+            is_valid = any([apiHashManager.check_hash(key, api_key.hashed_key) for api_key in api_keys])
+            return is_valid
+        except Exception as e:
+            models_logger.error(e)
             raise e
+        
+    def retrieve_api_key(self, key: str, organization_id: str) -> APIKeySchema:
+        """Retrieve a given api_key for an organizaton"""
+
+        try:
+            api_keys = self.retrieve_organization_api_keys(organization_id)
+            for api_key in api_keys:
+                if apiHashManager.check_hash(key, api_key.hashed_key):
+                    return api_key
+        except:
+            return None
+            
         
 apiKeysCollection = APIKeysCollection()

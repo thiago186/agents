@@ -7,6 +7,9 @@ def test_create_api_key(_api_key):
     print(document_id)
 
 def test_retrieve_api_key(_api_key):
-    """Testing the retrieval of an API key document from the database"""
-    document = apiKeysCollection.retrieve_api_key()
-    assert document
+    """
+    Testing the retrieval of an API key document from the database
+    This test simulates the situation where the user gives a key and the server needs to validate if the key is valid for the given organization
+    """
+
+    valid_api
