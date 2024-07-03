@@ -28,6 +28,10 @@ class UsersCollection(MongoCollection):
         if not user.email:
             raise UsersModelException("User must have an email")
         
+        if not user.password:
+            raise UsersModelException("User must have a password")
+
+
         #check for duplicate email
         user_by_email = self.retrieve_documents_by_fields({"email": user.email})
         if user_by_email:
@@ -35,6 +39,7 @@ class UsersCollection(MongoCollection):
 
         if not user.hashed_password:
             user.hash_password()
+
         user_id = self.create_document(user.model_dump(by_alias=True))
         return user_id
 
