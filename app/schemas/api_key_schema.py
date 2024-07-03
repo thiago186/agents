@@ -7,6 +7,8 @@ from uuid import uuid4
 from pydantic import AliasChoices, BaseModel, Field
 
 from app.schemas.config_dict_schema import gen_config_dict
+from app.models.api_hash_model import apiHashManager
+from app.models.bcrypt_model import bcrypt_manager
 
 
 class APIKeyRole(str, Enum):
@@ -60,11 +62,10 @@ class NewAPIKeySchema(BaseModel):
 
     def get_api_key(self):
         """Get the API Key"""
-        # TODO: Implement the logic to generate the API key
+        api_key = apiHashManager.generate_api_key()
         key_dict = self.model_dump()
-        key_dict["hashed_key"] = "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"
-        key_dict["final_chars"] = "fc4e7"
-        api_key = "temp_api_key"
+        key_dict["hashed_key"] = bcrypt_manager.hash_password(api_key)
+        key_dict["final_chars"] = api_key[-4:]
         return APIKeySchema(**key_dict), api_key
 
 

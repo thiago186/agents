@@ -1,7 +1,7 @@
 from app.schemas.users_schema import UserSchema
 from app.models.users_model import usersCollection
 from app.models.bcrypt_model import bcrypt_manager
-from app.exceptions import DuplicateUserException, UsersModelException
+from app.exceptions import DuplicateUserException, ModelInDbException
 
 def test_save_user(_user):
     user_id = usersCollection.create_user(_user)
@@ -24,7 +24,7 @@ def test_save_invalid_user():
         usersCollection.create_user(invalid_user)
         assert False, "Expected an error for saving an invalid user"
     except Exception as e:
-        assert isinstance(e, UsersModelException)
+        assert isinstance(e, ModelInDbException)
 
 def test_retrieve_user(_user):
     user_id = _user.id

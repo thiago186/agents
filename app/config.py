@@ -6,6 +6,6 @@ class Settings(BaseSettings):
     log_level: str
     mongo_uri: str
     mongo_db: str
-
+    api_key_length: int
 
 settings = Settings()

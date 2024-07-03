@@ -1,7 +1,8 @@
-class UsersModelException(Exception):
+class ModelInDbException(Exception):
     """Base class for exceptions in the models module."""
     pass
 
-class DuplicateUserException(UsersModelException):
-    def __init__(self, message="User with this email already exists"):
+class DuplicateUserException(ModelInDbException):
+    def __init__(self, duplicated_key, db_name):
+        message = f"User with '{duplicated_key}' already exists in databse '{db_name}'"
         super().__init__(message)
