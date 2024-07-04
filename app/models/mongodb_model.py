@@ -34,7 +34,14 @@ class MongoCollection:
             models_logger.error(f"Error deleting document: {e}")
             raise e
 
-    def edit_document_by_id(self, doc_id: str, new_document):
+    def edit_document_by_id(self, doc_id: str, new_document: dict) -> int:
+        """Edit a document in the collection by its id
+        Args:
+            doc_id (str): The id of the document to edit
+            new_document (dict): The new document data
+        Returns:
+            int: The number of documents modified
+        """
         try:
             result = self.collection.replace_one({"_id": doc_id}, new_document)
             return result.modified_count > 0
