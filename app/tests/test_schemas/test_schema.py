@@ -1,5 +1,5 @@
-from app.schemas.agent_schema import LLMModels
-from app.schemas.message_schemas import MessageSchema, MessageType, MessageRole
+from app.views.agent_schema import LLMModels
+from app.views.message_schemas import MessageSchema, MessageType, MessageRole
 
 def test_agent_schema(_agent):
 

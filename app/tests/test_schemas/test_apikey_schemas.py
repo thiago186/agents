@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
+from app.views.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
 
 def test_api_key_schema(_api_key):
     

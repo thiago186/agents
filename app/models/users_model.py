@@ -2,7 +2,7 @@
 
 from app.models.mongodb_model import MongoCollection
 from app.logging_config import models_logger
-from app.schemas.users_schema import UserSchema
+from app.views.users_schema import UserSchema
 from app.exceptions import DuplicateUserException, ModelInDbException
 
 

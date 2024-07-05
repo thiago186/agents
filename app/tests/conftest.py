@@ -2,12 +2,12 @@ import pytest
 from uuid import uuid4
 from datetime import datetime
 
-from app.schemas.agent_schema import AgentSchema, LLMModels
-from app.schemas.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
-from app.schemas.conversation_schema import ConversationSchema
-from app.schemas.message_schemas import MessageSchema, MessageRole, MessageType
-from app.schemas.organization_schema import OrganizationSchema, OrganizationRoles
-from app.schemas.users_schema import UserSchema
+from app.views.agent_schema import AgentSchema, LLMModels
+from app.views.api_key_schema import APIKeySchema, APIKeyRole, APIKeyStatus
+from app.views.conversation_schema import ConversationSchema
+from app.views.message_schemas import MessageSchema, MessageRole, MessageType
+from app.views.organization_schema import OrganizationSchema, OrganizationRoles
+from app.views.users_schema import UserSchema
 from app.models.api_hash_model import apiHashManager
 from app.models.auth_model import authHandler
 

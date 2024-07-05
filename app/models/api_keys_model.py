@@ -2,7 +2,7 @@ from typing import List
 
 from app.models.mongodb_model import MongoCollection
 from app.models.api_hash_model import apiHashManager
-from app.schemas.api_key_schema import APIKeySchema, APIKeyStatus
+from app.views.api_key_schema import APIKeySchema, APIKeyStatus
 from app.logging_config import models_logger
 from app.exceptions import ModelInDbException
 

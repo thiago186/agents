@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from jose import jwt, JWTError
 
 from app.config import settings
-from app.schemas.users_schema import UserSchema
+from app.views.users_schema import UserSchema
 
 class TokenData(BaseModel):
     username: str | None = None

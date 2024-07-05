@@ -1,6 +1,6 @@
 """This module contains the tests for the API key model"""
 from app.models.api_keys_model import apiKeysCollection
-from app.schemas.api_key_schema import APIKeySchema
+from app.views.api_key_schema import APIKeySchema
 
 def test_create_api_key(_api_key):
     """Testing the creation of an API key document in the database"""

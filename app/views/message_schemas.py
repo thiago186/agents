@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from app.schemas.config_dict_schema import gen_config_dict
+from app.views.config_dict_schema import gen_config_dict
 
 
 class MessageType(str, Enum):

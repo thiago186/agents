@@ -7,8 +7,8 @@ from uuid import uuid4
 
 from pydantic import AliasChoices, BaseModel, Field
 
-from app.schemas.message_schemas import MessageSchema
-from app.schemas.config_dict_schema import gen_config_dict
+from app.views.message_schemas import MessageSchema
+from app.views.config_dict_schema import gen_config_dict
 
 class ConversationStatus(str, Enum):
     """Possible statuses for a conversation instance"""

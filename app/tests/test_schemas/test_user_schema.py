@@ -1,4 +1,4 @@
-from app.schemas.users_schema import UserSchema
+from app.views.users_schema import UserSchema
 from app.models.bcrypt_model import bcrypt_manager
 
 
