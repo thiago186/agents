@@ -5,15 +5,24 @@ from typing import List, Optional
 from enum import Enum
 import uuid
 
-from pydantic import AliasChoices, BaseModel, Field, ConfigDict
+from pydantic import AliasChoices, BaseModel, Field
 
 from app.models.bcrypt_model import bcrypt_manager
+from app.views.config_dict_schema import gen_config_dict
+
+class UserBaseSchema(BaseModel):
+    """Base schema for the user received at the login endpoint"""
+    
+    model_config = gen_config_dict
+
+    email: str
+    password: str
 
 
 class UserSchema(BaseModel):
     """Base schema for a user. It doesn't contain hashed password field"""
 
-    model_config = ConfigDict(use_enum_values=True)
+    model_config = gen_config_dict
     id: str = Field(
         default_factory=None,
         alias=AliasChoices("id", "_id", "id_"),
