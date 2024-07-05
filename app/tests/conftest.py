@@ -9,6 +9,7 @@ from app.schemas.message_schemas import MessageSchema, MessageRole, MessageType
 from app.schemas.organization_schema import OrganizationSchema, OrganizationRoles
 from app.schemas.users_schema import UserSchema
 from app.models.api_hash_model import apiHashManager
+from app.models.auth_model import authHandler
 
 
 @pytest.fixture(scope="session")
@@ -69,7 +70,7 @@ def _organization(_api_key):
         organization_name='Test Organization',
         organization_role=OrganizationRoles.admin,
         api_keys=[_api_key],
-        members=['e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'],
+        members={'e6c56ca5-e695-4325-a9a7-29a96d2fc4e7': OrganizationRoles.admin.value},
         owner_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'
     )
 
@@ -83,3 +84,7 @@ def _user():
         password='test_password',
         created_at=datetime(2000, 1, 1)
     )
+
+@pytest.fixture(scope="session")
+def _jwt_token(_user):
+    return authHandler.create_access_token_from_user(_user)

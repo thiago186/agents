@@ -35,7 +35,7 @@ class OrganizationSchema(BaseModel):
     organization_name: str
     owner_id: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    members: List[str] = []
+    members: dict = {"user_id": "role"}
     api_keys: List[APIKeySchema] = []
 
 if __name__ == "__main__":
@@ -43,6 +43,6 @@ if __name__ == "__main__":
         id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         organization_name="Test Organization",
         owner_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
-        members=["e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"]
+        members={"e6c56ca5-e695-4325-a9a7-29a96d2fc4e7": OrganizationRoles.admin.value}
     )
     print(organization.model_dump())

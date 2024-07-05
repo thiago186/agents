@@ -7,5 +7,8 @@ class Settings(BaseSettings):
     mongo_uri: str
     mongo_db: str
     api_key_length: int
+    jwt_secret: str
+    jwt_algorithm: str
+    jwt_expiration: int
 
 settings = Settings()
