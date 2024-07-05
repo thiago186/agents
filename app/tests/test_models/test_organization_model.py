@@ -20,12 +20,12 @@ def test_user_has_role(_organization, _user):
     assert user_has_role is True
 
 def test_add_user_to_organization(_organization, _invalid_user):
-    result = _organization.add_user_to_organization(_invalid_user.id, OrganizationRoles.manager)
+    result = organizationsCollection.add_user_to_organization(_invalid_user.id, _organization.id, OrganizationRoles.manager)
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is True
 
 def test_remove_user_from_organization(_organization, _invalid_user):
-    result = _organization.remove_user_from_organization(_invalid_user.id)
+    result = organizationsCollection.remove_user_from_organization(_invalid_user.id, _organization.id)
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is False
     
@@ -34,6 +34,5 @@ def test_invalid_user_has_role(_organization, _invalid_user):
     assert user_has_role is False
 
 def test_delete_organization(_organization):
-    organizationsCollection.delete_organization(_organization.id)
     removed_organization = organizationsCollection.delete_organization(_organization.id)
     assert removed_organization is True

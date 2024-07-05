@@ -11,7 +11,6 @@ class MongoCollection:
 
     def create_document(self, document: dict):
         try:
-            models_logger.debug(f"Type: {type(document)} Creating document: {document}")
             result = self.collection.insert_one(document)
             models_logger.debug(f"Document created with id: {result.inserted_id}")
             return str(result.inserted_id)

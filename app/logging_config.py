@@ -5,6 +5,7 @@ from datetime import datetime
 
 from app.config import settings
 
+
 class CustomJsonFormatter(logging.Formatter):
     def format(self, record):
         log_record = {
@@ -13,8 +14,11 @@ class CustomJsonFormatter(logging.Formatter):
             "levelname": record.levelname,
             "message": record.getMessage(),
             "function": record.funcName,
+            "filename": record.filename,
+            "lineno": record.lineno,
         }
         return json.dumps(log_record)
+
 
 def setup_logger(name, log_file, level=settings.log_level):
     """Function to set up as many loggers as you want"""
