@@ -26,9 +26,17 @@ class MongoCollection:
         except Exception as e:
             models_logger.error(f"Error retrieving document: {e}")
 
-    def delete_document(self, doc_id: str):
+    def delete_document(self, doc_id: str) -> bool:
+        """
+        Delete a document in the collection by its id
+        Args:
+            doc_id (str): The id of the document to delete
+        Returns:
+            bool: True if the document was deleted, False otherwise
+        """
         try:
             result = self.collection.delete_one({"_id": doc_id})
+            models_logger.debug(f"Document deleted: {result.deleted_count}")
             return result.deleted_count > 0
         except Exception as e:
             models_logger.error(f"Error deleting document: {e}")

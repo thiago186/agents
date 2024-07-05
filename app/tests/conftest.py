@@ -86,5 +86,16 @@ def _user():
     )
 
 @pytest.fixture(scope="session")
+def _invalid_user():
+    return UserSchema(
+        id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e1',
+        email="email",
+        username='test_invalid_user',
+        first_name='Test',
+        password='test_password',
+        created_at=datetime(2000, 1, 1)
+    )
+
+@pytest.fixture(scope="session")
 def _jwt_token(_user):
     return authHandler.create_access_token_from_user(_user)

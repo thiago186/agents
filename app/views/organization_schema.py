@@ -22,6 +22,12 @@ class OrganizationRoles(str, Enum):
     manager = "manager"
     user = "user"
 
+    def get_roles_hierarchy():
+        return {
+            OrganizationRoles.admin: 3,
+            OrganizationRoles.manager: 2,
+            OrganizationRoles.user: 1
+        }
 
 class OrganizationSchema(BaseModel):
     """Schema for a organization in the database."""
