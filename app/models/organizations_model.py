@@ -77,6 +77,44 @@ class OrganizationsCollection(MongoCollection):
             models_logger.error(e)
             raise e
         
+    def add_user_to_organization(self, user_id: str, organization_id: str, role: OrganizationRoles):
+        """
+        Add a user to an organization
+        """
+
+        try:
+
+            if not isinstance(role, OrganizationRoles):
+                raise ModelInDbException("Role must be an instance of OrganizationRoles")
+
+            organization = self.retrieve_organization_by_id(organization_id)
+            if organization:
+                organization.members[user_id] = role.value
+                result = self.edit_document_by_id(organization_id, organization.model_dump(by_alias=True))
+                if result:
+                    return True
+            return False
+
+        except Exception as e:
+            models_logger.error(e)
+
+    def remove_user_from_organization(self, user_id: str, organization_id: str):
+        """
+        Remove a user from an organization
+        """
+
+        try:
+            organization = self.retrieve_organization_by_id(organization_id)
+            if organization:
+                organization.members.pop(user_id, None)
+                result = self.edit_document_by_id(organization_id, organization.model_dump(by_alias=True))
+                if result:
+                    return True
+            return False
+
+        except Exception as e:
+            models_logger.error(e)
+        
     def delete_organization(self, organization_id: str):
         """Delete an organization from the database"""
         try:

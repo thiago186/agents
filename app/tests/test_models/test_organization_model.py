@@ -19,11 +19,21 @@ def test_user_has_role(_organization, _user):
     user_has_role = organizationsCollection.user_has_role(_user.id, _organization.id, OrganizationRoles.admin)
     assert user_has_role is True
 
+def test_add_user_to_organization(_organization, _invalid_user):
+    result = _organization.add_user_to_organization(_invalid_user.id, OrganizationRoles.manager)
+    assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
+    assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is True
+
+def test_remove_user_from_organization(_organization, _invalid_user):
+    result = _organization.remove_user_from_organization(_invalid_user.id)
+    assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
+    assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is False
+    
 def test_invalid_user_has_role(_organization, _invalid_user):
     user_has_role = organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin)
     assert user_has_role is False
 
-# def test_delete_organization(_organization):
-#     organizationsCollection.delete_organization(_organization.id)
-#     removed_organization = organizationsCollection.delete_organization(_organization.id)
-#     assert removed_organization is True
+def test_delete_organization(_organization):
+    organizationsCollection.delete_organization(_organization.id)
+    removed_organization = organizationsCollection.delete_organization(_organization.id)
+    assert removed_organization is True
