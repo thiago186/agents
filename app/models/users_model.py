@@ -52,6 +52,18 @@ class UsersCollection(MongoCollection):
             models_logger.warning(e)
             raise e
 
+    def retrieve_user_by_email(self, email: str) -> UserSchema:
+        """Retrieve a user by its email"""
+        try:
+            document = self.retrieve_documents_by_fields({"email": email})
+            if document:
+                return UserSchema(**document[0])
+            
+        except Exception as e:
+            models_logger.warning(e)
+            raise e
+
+
     def update_user(self, user: UserSchema) -> str:
         """Update a user in the database"""
 
@@ -70,4 +82,12 @@ class UsersCollection(MongoCollection):
 usersCollection = UsersCollection()
 
 if __name__ == "__main__":
-    print("hello!")
+    user = UserSchema(
+        id="user1",
+        email="thiago.wander22@gmail.com",
+        username="thiago.wander",
+        first_name="Thiago",
+        password="test_password"
+    )
+
+    usersCollection.create_user(user)

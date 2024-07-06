@@ -130,18 +130,18 @@ organizationsCollection = OrganizationsCollection()
 if __name__ == "__main__":
     organizationsCollection = OrganizationsCollection()
     organization1 = OrganizationSchema(
-        id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
-        organization_name="Test Organization 2",
+        id="testOrg1",
+        organization_name="Test Organization 1",
         owner_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         members={
-            "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7": OrganizationRoles.admin.value,
+            "user1": OrganizationRoles.admin.value,
             "e6c56ca5-e695-4325-a9a7-29a96d2fc4e4": OrganizationRoles.manager.value,
             }
     )
 
     organization2 = OrganizationSchema(
         id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e4",
-        organization_name="Test Organization 1",
+        organization_name="Test Organization 2",
         owner_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         members={
             "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7": OrganizationRoles.admin.value,
@@ -171,5 +171,5 @@ if __name__ == "__main__":
     print(organizationsCollection.user_has_role(user_id2, organization2_id, OrganizationRoles.user))
 
     #delete organizations
-    organizationsCollection.delete_organization(organization1_id)
+    # organizationsCollection.delete_organization(organization1_id)
     organizationsCollection.delete_organization(organization2_id)

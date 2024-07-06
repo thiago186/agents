@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends
 
+from app.logging_config import api_logger
+
 agents_router = APIRouter(
     prefix="/agents",
     tags=["agents"],
