@@ -77,7 +77,7 @@ class OrganizationsCollection(MongoCollection):
             models_logger.error(e)
             raise e
         
-    def add_user_to_organization(self, user_id: str, organization_id: str, role: OrganizationRoles):
+    def update_user_into_organization(self, user_id: str, organization_id: str, role: OrganizationRoles):
         """
         Add a user to an organization
         """

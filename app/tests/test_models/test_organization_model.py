@@ -19,8 +19,8 @@ def test_user_has_role(_organization, _user):
     user_has_role = organizationsCollection.user_has_role(_user.id, _organization.id, OrganizationRoles.admin)
     assert user_has_role is True
 
-def test_add_user_to_organization(_organization, _invalid_user):
-    result = organizationsCollection.add_user_to_organization(_invalid_user.id, _organization.id, OrganizationRoles.manager)
+def test_update_user_into_organization(_organization, _invalid_user):
+    result = organizationsCollection.update_user_into_organization(_invalid_user.id, _organization.id, OrganizationRoles.manager)
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is True
 

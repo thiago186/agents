@@ -63,7 +63,6 @@ def access_required(access_level: OrganizationRoles):
 
     if not isinstance(access_level, OrganizationRoles):
         raise TypeError("access_level must be an instance of OrganizationRoles")
-
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -94,4 +93,5 @@ def access_required(access_level: OrganizationRoles):
                 raise HTTPException(status_code=403, detail="User does not have access to this resource")
             
             return func(*args, **kwargs)
-        return wrapper 
+        return wrapper
+    return decorator
