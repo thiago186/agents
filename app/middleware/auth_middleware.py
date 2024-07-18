@@ -25,6 +25,7 @@ def authenticate_user(user: UserBaseSchema):
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
         if not bcrypt_manager.check_password(user.password, user_in_db.hashed_password):
+            api_logger.error(f"Invalid credentials for user {user_in_db.id}")
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
         jwt_token = authHandler.create_access_token(data={"sub": user_in_db.id})
@@ -38,13 +39,16 @@ def is_valid_token(request: Request):
     """
     This function will be used as Depends on routes that require authentication
     """
-    
+    api_logger.debug("Validating token")
     try:
         token = request.cookies.get("token")
+        # api_logger.debug(f"Token: {token}")
         if not token:
-            raise HTTPException(status_code=401, detail="Invalid credentials")
+            api_logger.error("No credentials provided")
+            raise HTTPException(status_code=401, detail="No credentials provided")
         
         payload = authHandler.verify_token(token)
+        # api_logger.debug(f"Payload: {payload}")
         return payload
     
     except Exception as e:

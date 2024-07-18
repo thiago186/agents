@@ -19,7 +19,7 @@ class AuthModel:
     def create_access_token(self, data: dict):
         """Create an access token with the given data"""
         to_encode = data.copy()
-        expire = datetime.now(timezone.utc) + timedelta(minutes=self.access_token_expire_minutes)
+        expire = datetime.now(timezone.utc) + timedelta(seconds=self.access_token_expire_minutes)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.secret_key, algorithm=self.algorithm)
         return encoded_jwt

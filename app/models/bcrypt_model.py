@@ -24,9 +24,13 @@ if __name__ == "__main__":
 
     # Criar hash de uma senha
     password = "minha_senha_segura"
+    hashed_ = "$2b$12$y47dicbCj4JGcTw1c1sbX.3ifbq8zVdcbBiIZi.oaGtXQLUqJCq36"
     hashed_password = bcrypt_manager.hash_password(password)
     print(f"Senha hasheada: {hashed_password}")
     
+    is_correct = bcrypt_manager.check_password(password, hashed_password)
+    print(is_correct)
+
     # Verificar uma senha
     is_correct = bcrypt_manager.check_password(password, hashed_password)
     print(f"A senha está correta? {is_correct}")

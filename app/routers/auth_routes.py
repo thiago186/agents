@@ -27,10 +27,11 @@ def login(user: UserBaseSchema, response: Response):
 
     return {"status": "ok"}
 
-@auth_router.get("/test", dependencies=[Depends(is_valid_token)])
+@auth_router.get("/verify", dependencies=[Depends(is_valid_token)])
 def auth_test(request: Request):
     """This route is a test for the authentication middleware"""
-    return {"message": "You have access!"}
+    # api_logger.debug(f"Request headers: {request.headers}")
+    return {"valid": True}
 
 @auth_router.get("/test-role", dependencies=[Depends(is_valid_token)])
 @access_required(access_level=OrganizationRoles.admin)
