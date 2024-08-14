@@ -1,9 +1,7 @@
 """This file contains all users schemas for the application."""
 
 from datetime import datetime, timezone
-from typing import List, Optional
-from enum import Enum
-import uuid
+from typing import Optional
 
 from pydantic import AliasChoices, BaseModel, Field
 

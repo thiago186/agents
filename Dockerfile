@@ -1,19 +1,25 @@
-FROM python:3.10-slim
+FROM python:3.10-alpine
 
-RUN apt update
-RUN apt install -y build-essential libssl-dev libffi-dev python3-dev
-RUN pip install --upgrade pip
+# Instala as dependências de compilação e execução em uma única camada
+RUN apk add --no-cache --virtual .build-deps \
+    build-base \
+    libffi-dev \
+    openssl-dev \
+    && pip install --no-cache-dir --upgrade pip
 
+# Copia apenas o necessário e instala as dependências
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt \
+    && apk del .build-deps
+
+# Copia o código da aplicação
 COPY ./app /code/app
-WORKDIR /code/
+WORKDIR /code
 
-COPY ./requirements.txt /code/requirements.txt
-
+# Copia e configura o script de entrypoint
 COPY .docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-RUN pip install --no-cache-dir --upgrade  -r /code/requirements.txt \
-    && chmod +x /entrypoint.sh
-
-EXPOSE "8000"
+EXPOSE 8000
 
 CMD ["/entrypoint.sh"]
