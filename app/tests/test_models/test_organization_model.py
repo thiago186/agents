@@ -1,5 +1,5 @@
 from app.models.organizations_model import organizationsCollection
-from app.views.organization_schema import OrganizationSchema, OrganizationRoles
+from app.views.organization_schema import OrganizationRoles
 
 def test_create_organization(_organization):
     organization_id = organizationsCollection.create_organization(_organization)
@@ -20,12 +20,12 @@ def test_user_has_role(_organization, _user):
     assert user_has_role is True
 
 def test_update_user_into_organization(_organization, _invalid_user):
-    result = organizationsCollection.update_user_into_organization(_invalid_user.id, _organization.id, OrganizationRoles.manager)
+    organizationsCollection.update_user_into_organization(_invalid_user.id, _organization.id, OrganizationRoles.manager)
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is True
 
 def test_remove_user_from_organization(_organization, _invalid_user):
-    result = organizationsCollection.remove_user_from_organization(_invalid_user.id, _organization.id)
+    organizationsCollection.remove_user_from_organization(_invalid_user.id, _organization.id)
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.admin) is False
     assert organizationsCollection.user_has_role(_invalid_user.id, _organization.id, OrganizationRoles.manager) is False
     

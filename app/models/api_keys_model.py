@@ -80,7 +80,7 @@ class APIKeysCollection(MongoCollection):
             for api_key in api_keys:
                 if apiHashManager.check_api_hash(key, api_key.hashed_key):
                     return api_key
-        except:
+        except Exception:
             return None
         
     def is_valid_api_key(self, key: str, organization_id: str) -> bool:
