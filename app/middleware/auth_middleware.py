@@ -7,7 +7,7 @@ from app.models.auth_model import authHandler
 from app.models.bcrypt_model import bcrypt_manager
 from app.models.users_model import usersCollection
 from app.models.organizations_model import organizationsCollection
-from app.views.organization_schema import OrganizationSchema, OrganizationRoles
+from app.views.organization_schema import OrganizationRoles
 from app.views.users_schema import UserBaseSchema
 from app.logging_config import api_logger
 
@@ -91,11 +91,30 @@ def access_required(access_level: OrganizationRoles):
             decoded_token = authHandler.decode_token(token)
             user_id = decoded_token.get('sub')
 
-            has_access = organizationsCollection.user_has_role(user_id, organization_id, access_level)
+            try:
+                has_access = organizationsCollection.user_has_role(user_id, organization_id, access_level)
+            except Exception as e:
+                api_logger.error(e)
+                raise HTTPException(status_code=500, detail=e.__str__())
             
             if not has_access:
                 raise HTTPException(status_code=403, detail="User does not have access to this resource")
-            
             return func(*args, **kwargs)
         return wrapper
     return decorator
+
+
+def get_organization_id_from_request(request: Request) -> str:
+    """
+    This function retrieves the organization_id from the request headers
+    """
+    try:
+        organization_id = request.headers.get('organizationId', None)
+        if not organization_id:
+            raise HTTPException(status_code=401, detail="No organizationId provided")
+        
+        return organization_id
+    
+    except Exception as e:
+        api_logger.error("Request received without organizationId")
+        raise e

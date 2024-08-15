@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers.agents import agents_router
+from app.routers.agents_routes import agents_router
 from app.routers.auth_routes import auth_router
 from app.routers.commons import commons_router
 
@@ -29,3 +29,4 @@ app.add_middleware(
 app.include_router(agents_router)
 app.include_router(auth_router)
 app.include_router(commons_router)
+app.include_router(agents_router)

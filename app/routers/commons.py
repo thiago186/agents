@@ -2,7 +2,6 @@
 
 from fastapi import APIRouter, Depends, Request, HTTPException
 
-from app.logging_config import api_logger
 from app.models.organizations_model import organizationsCollection
 from app.middleware.auth_middleware import is_valid_token
 from app.utils.auth_utils import decode_jwt
@@ -38,6 +37,6 @@ async def get_user_orgs(request: Request):
 
         return {"organizations": user_orgs}
     
-    except:
+    except Exception:
         # api_logger.exception("An error occurred while retrieving the user organizations")
         raise HTTPException(status_code=500, detail="An error occurred while retrieving the user organizations")

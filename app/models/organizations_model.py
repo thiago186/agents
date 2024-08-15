@@ -5,7 +5,7 @@ from typing import List
 from app.models.mongodb_model import MongoCollection
 from app.logging_config import models_logger
 from app.views.organization_schema import OrganizationSchema, OrganizationRoles
-from app.exceptions import ModelInDbException
+from app.exceptions import ModelInDbException, ObjectNotFoundException
 
 class OrganizationsCollection(MongoCollection):
     """Class to interact with organizations collection in the database"""
@@ -66,13 +66,16 @@ class OrganizationsCollection(MongoCollection):
 
         try:
             organization = self.retrieve_organization_by_id(organization_id)
-            if organization:
-                roles_hierarchy = OrganizationRoles.get_roles_hierarchy()
-                user_role = organization.members.get(user_id)
-                if user_role:
-                    return roles_hierarchy[user_role] >= roles_hierarchy[desired_role]
-            return False
 
+            if not organization:
+                raise ObjectNotFoundException("Could not find the provided organization")
+
+            roles_hierarchy = OrganizationRoles.get_roles_hierarchy()
+            user_role = organization.members.get(user_id)
+            models_logger.debug(f"User role: {user_role} | Desired role: {desired_role}")
+            if user_role:
+                return roles_hierarchy[user_role] >= roles_hierarchy[desired_role]
+            
         except Exception as e:
             models_logger.error(e)
             raise e
