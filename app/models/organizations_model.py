@@ -90,7 +90,7 @@ class OrganizationsCollection(MongoCollection):
             organization = self.retrieve_organization_by_id(organization_id)
             if organization:
                 organization.members[user_id] = role.value
-                result = self.edit_document_by_id(organization_id, organization.model_dump(by_alias=True))
+                result = self.update_document_by_id(organization_id, organization.model_dump(by_alias=True))
                 if result:
                     return True
             return False
@@ -98,7 +98,7 @@ class OrganizationsCollection(MongoCollection):
         except Exception as e:
             models_logger.error(e)
 
-    def remove_user_from_organization(self, user_id: str, organization_id: str):
+    def remove_user_from_organization(self, user_id: str, organization_id: str) -> bool:
         """
         Remove a user from an organization
         """
@@ -107,7 +107,7 @@ class OrganizationsCollection(MongoCollection):
             organization = self.retrieve_organization_by_id(organization_id)
             if organization:
                 organization.members.pop(user_id, None)
-                result = self.edit_document_by_id(organization_id, organization.model_dump(by_alias=True))
+                result = self.update_document_by_id(organization_id, organization.model_dump(by_alias=True))
                 if result:
                     return True
             return False

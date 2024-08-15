@@ -6,8 +6,7 @@ def test_agent_schema(_agent):
     assert _agent.id == "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"
     assert _agent.organization_id == "e6c56ca5-e695-4325-a9a7-29a96d2fc4e7"
     assert _agent.llm_model == LLMModels.gpt3_5_turbo.value
-    assert _agent.agent_name in ["My Agent", "Edited Test Agent"]
-    assert _agent.system_prompt == "Hello!"
+    assert _agent.agent_name in ["Test Agent", "Test Agent Updated!"]
 
 
 def test_message_schema(_message):

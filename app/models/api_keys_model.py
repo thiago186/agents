@@ -108,7 +108,7 @@ class APIKeysCollection(MongoCollection):
             api_key = self.retrieve_organization_api_key(key, organization_id)
             if api_key:
                 api_key.key_status = APIKeyStatus.revoked.value
-                result = self.edit_document_by_id(api_key.id, api_key.model_dump(by_alias=True))
+                result = self.update_document_by_id(api_key.id, api_key.model_dump(by_alias=True))
                 return result
 
             raise ModelInDbException("Could not find the API key provided to revoke")

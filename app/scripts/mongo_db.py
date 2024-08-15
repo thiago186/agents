@@ -6,6 +6,7 @@ def create_collections():
     db = client[settings.mongo_db]
     db.create_collection('agents')
     db.create_collection('conversations')
+    db.create_collection('organizations')
     print("Collections created!")
 
 if __name__ == "__main__":

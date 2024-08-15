@@ -1,5 +1,4 @@
 import pytest
-from uuid import uuid4
 from datetime import datetime
 
 from app.views.agent_schema import AgentSchema, LLMModels
@@ -18,9 +17,8 @@ def _agent():
         id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
         organization_id="e6c56ca5-e695-4325-a9a7-29a96d2fc4e7",
         llm_model= LLMModels.gpt3_5_turbo,
-        agent_name='My Agent',
-        system_prompt='Hello!'
-
+        agent_name='Test Agent',
+        system_prompt='Hello! This is the prompt for the test agent. Say HI!'
     )
 
 

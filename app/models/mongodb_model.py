@@ -41,7 +41,7 @@ class MongoCollection:
             models_logger.error(f"Error deleting document: {e}")
             raise e
 
-    def edit_document_by_id(self, doc_id: str, new_document: dict) -> int:
+    def update_document_by_id(self, doc_id: str, new_document: dict) -> int:
         """Edit a document in the collection by its id
         Args:
             doc_id (str): The id of the document to edit

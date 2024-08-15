@@ -17,6 +17,7 @@ class LLMModels(Enum):
     gpt4 = "gpt-4"
     gpt4_turbo = "gpt-4-turbo"
     gpt4o = "gpt-4o"
+    gpt4o_mini = "gpt-4o-mini"
 
 
 class AgentSchema(BaseModel):

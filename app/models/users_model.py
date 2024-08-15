@@ -71,7 +71,7 @@ class UsersCollection(MongoCollection):
             if not isinstance(user, UserSchema):
                 raise ValueError("User must be an instance of UserSchema")
 
-            result = self.edit_document_by_id(user.id, user.model_dump(by_alias=True))
+            result = self.update_document_by_id(user.id, user.model_dump(by_alias=True))
             return result
 
         except Exception as e:
