@@ -31,6 +31,7 @@ class OrganizationsCollection(MongoCollection):
         except Exception as e:
             models_logger.error(e)
             raise e
+      
         
     def retrieve_organization_by_id(self, organization_id: str) -> OrganizationSchema:
         """Retrieve an organization by its id"""
