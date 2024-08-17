@@ -5,7 +5,6 @@ To edit and create routes, the user must be logged, and have minimum editor acce
 
 from fastapi import APIRouter, Depends, Request
 
-
 from app.middleware.auth_middleware import is_valid_token, access_required, get_organization_id_from_request
 from app.models.agents_model import agentsCollection
 from app.views.agent_schema import AgentSchema
@@ -67,10 +66,54 @@ def update_agent(agent: AgentSchema, request: Request):
         return {"detail": "Error updating agent", "error": str(e)}
 
 
+@agents_router.get("/retrieve-agent/{agent_id}")
+@access_required(access_level=OrganizationRoles.user)
+def RETRIEVE_AGENT(agent_id: str, request: Request):
+    """
+    Receive a agent_id
+    If the user requesting has the minimum access level, the agent is retrieved.
+    """
+
+    try:
+        agent = agentsCollection.retrieve_agent_by_id(agent_id)
+        if agent:
+            return agent
+
+        return {"detail": "Agent not found"}
+    except Exception as e:
+        api_logger.error(e)
+        return {"detail": "Error retrieving agent", "error": str(e)}
+
+
+@agents_router.get("/retrieve-org-agents")
+@access_required(access_level=OrganizationRoles.user)
+def retrieve_agents_by_organization(request: Request):
+    """
+    Retrieve all agents from the organization that the user is part of.
+    """
+
+    organization_id = get_organization_id_from_request(request)
+    agents = agentsCollection.retrieve_organization_agents(organization_id)
+    return agents
+
+
+@agents_router.delete("/delete-agent")
+@access_required(access_level=OrganizationRoles.manager)
+def delete_agent(agent_id: str, request: Request):
+    """
+    Receive a agent_id
+    If the user requesting has the minimum access level, the agent is deleted.
+    """
+
+    try:
+        deleted = agentsCollection.delete_agent(agent_id)
+        return {"deleted": deleted}
+    except Exception as e:
+        api_logger.error(e)
+        return {"detail": "Error deleting agent", "error": str(e)}
 
 
 # TODO: Implement the routes for the agents API
-# /retrieve-agent
-# /update-agent
-# /delete-agent
 # /retrieve-agents-by-organization
+# Check business rules for retrieving agent. A user should only be able to retrieve agents
+# from the organization that he is part of.
