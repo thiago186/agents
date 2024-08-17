@@ -13,6 +13,8 @@ class DuplicateUserException(ModelInDbException):
         message = f"User with '{duplicated_key}' already exists in databse '{db_name}'"
         super().__init__(message)
 
-class DuplicateOrganizationException(DuplicateKeyError):
+class DuplicatedObjectIndDb(DuplicateKeyError):
     """General exception for when an organization already exists in the database"""
-    pass
+    
+    def __init__(self, message, **kwargs):
+        super().__init__(message, **kwargs)

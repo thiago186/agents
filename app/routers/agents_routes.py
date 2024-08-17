@@ -4,7 +4,9 @@ To edit and create routes, the user must be logged, and have minimum editor acce
 """
 
 from fastapi import APIRouter, Depends, Request
+from fastapi.exceptions import HTTPException
 
+from app.exceptions import DuplicatedObjectIndDb
 from app.middleware.auth_middleware import is_valid_token, access_required, get_organization_id_from_request
 from app.models.agents_model import agentsCollection
 from app.views.agent_schema import AgentSchema
@@ -32,17 +34,26 @@ def create_user(agent: AgentSchema, request: Request):
     """
     Receive a AgentSchema object
     If the user requesting has the minimum access level, the agent is created.
+    This endpoint returns the created agent_id.
     
     *The organization_id is taken from the header of the request.
     
     """
-
     api_logger.debug(f"Received agent: {agent}")
     organization_id = get_organization_id_from_request(request)
     agent.organization_id = organization_id # OVERRIDE THE ORGANIZATION ID TO THE ONE IN THE HEADER
 
-    agent_id = agentsCollection.create_agent(agent)
-    return {"agent_id": agent_id}
+    try:
+        agent_id = agentsCollection.create_agent(agent)
+        return {"agent_id": agent_id}
+    
+    except DuplicatedObjectIndDb:
+        raise HTTPException(status_code=400, detail="An agent with this id already exists")
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Error creating agent")
+
+    
 
 @agents_router.patch("/update-agent")
 @access_required(access_level=OrganizationRoles.manager)

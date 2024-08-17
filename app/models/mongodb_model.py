@@ -1,6 +1,8 @@
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 
 from app.config import settings
+from app.exceptions import DuplicatedObjectIndDb
 from app.logging_config import models_logger
 
 class MongoCollection:
@@ -14,6 +16,10 @@ class MongoCollection:
             result = self.collection.insert_one(document)
             models_logger.debug(f"Document created with id: {result.inserted_id}")
             return str(result.inserted_id)
+        
+        except DuplicateKeyError:
+            raise DuplicatedObjectIndDb(f"Duplicated object in database with id {document['_id']}")
+        
         except Exception as e:
             models_logger.error(f"Error creating document: {e}")
             raise e

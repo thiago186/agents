@@ -22,8 +22,8 @@ class LLMModels(Enum):
 
 class AgentSchema(BaseModel):
     model_config = gen_config_dict
-    id: str = Field(
-        default_factory=None,
+    id: Optional[str] = Field(
+        default_factory=lambda: str(uuid.uuid4()),
         alias=AliasChoices("id", "_id", "id_"),
         serialization_alias="_id",
     )
