@@ -51,7 +51,7 @@ def create_user(agent: AgentSchema, request: Request):
         raise HTTPException(status_code=400, detail="An agent with this id already exists")
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error creating agent")
+        raise HTTPException(status_code=500, detail=f"Error creating agent. '{e}'")
 
     
 
