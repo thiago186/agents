@@ -29,21 +29,10 @@ jobs:
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
-    - name: Verify secrets (safely)
-      run: |
-        echo "Checking for specific secrets (without revealing values):"
-        for secret in ${{ toJson(secrets) }}; do
-          if [ -n "${!secret}" ]; then
-            echo "$secret is set"
-          else
-            echo "$secret is not set"
-          fi
-        done
-    
     - name: Test with pytest
       env:
-        ${{ toJson(secrets) }}
-        ${{ toJson(vars) }}
+        ${{ secrets }}
+        ${{ vars }}
       run: |
         cd app
         pytest -v
