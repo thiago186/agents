@@ -12,6 +12,7 @@ jobs:
     name: Build and Test
     environment: staging variables
     runs-on: ubuntu-latest
+    env: ${{ vars}}
     
     steps:
     - uses: actions/checkout@v4
@@ -27,15 +28,17 @@ jobs:
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
-    - name: Set environment variables
-      run: |
-        # Exporta todas as variáveis de ambiente (vars)
-        echo "${{ toJson(vars) }}" | jq -r 'to_entries[] | "echo \(.key)=\(.value) >> $GITHUB_ENV"' | sh
-        
-        # Exporta todos os secrets
-        echo "${{ toJson(secrets) }}" | jq -r 'to_entries[] | "echo \(.key)=\(.value) >> $GITHUB_ENV"' | sh
-    
     - name: Test with pytest
+      env:
+        JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+        JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        MONGO_DB: ${{ secrets.MONGO_DB }}
+        MONGO_INITDB_DATABASE: ${{ secrets.MONGO_INITDB_DATABASE }}
+        MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+        MONGO_INIT_DB_ROOT_USERNAME: ${{ secrets.MONGO_INIT_DB_ROOT_USERNAME }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        
       run: |
         cd app
         pytest -v
