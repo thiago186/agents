@@ -36,12 +36,7 @@ jobs:
         env | wc -l
     
     - name: Test with pytest
-      env:
-        # This passes all environment variables and secrets
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      env: ${{ secrets }}
       run: |
         cd app
         pytest -v
-      # This ensures all env vars and secrets are available to this step
-      env: ${{ vars }}
-      secrets: inherit
