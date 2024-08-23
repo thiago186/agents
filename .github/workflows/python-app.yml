@@ -29,23 +29,6 @@ jobs:
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
-    - name: Verify environment variables (safely)
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        echo "Listing all environment variable names (values hidden for security):"
-        env | cut -d= -f1 | sort
-        echo "Number of environment variables:"
-        env | wc -l
-        echo "Checking for specific environment variables:"
-        for var in ${{ toJson(vars) }}; do
-          if [ -n "${!var}" ]; then
-            echo "$var is set"
-          else
-            echo "$var is not set"
-          fi
-        done
-
     - name: Verify secrets (safely)
       run: |
         echo "Checking for specific secrets (without revealing values):"
