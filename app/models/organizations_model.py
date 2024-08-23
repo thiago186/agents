@@ -77,6 +77,9 @@ class OrganizationsCollection(MongoCollection):
             if user_role:
                 return roles_hierarchy[user_role] >= roles_hierarchy[desired_role]
             
+            else:
+                return False
+            
         except Exception as e:
             models_logger.error(e)
             raise e
@@ -132,7 +135,7 @@ class OrganizationsCollection(MongoCollection):
 organizationsCollection = OrganizationsCollection()
 
 if __name__ == "__main__":
-    organizationsCollection = OrganizationsCollection()
+    # organizationsCollection = OrganizationsCollection()
     organization1 = OrganizationSchema(
         id="testOrg1",
         organization_name="Test Organization 1",

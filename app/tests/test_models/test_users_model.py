@@ -1,10 +1,10 @@
-from app.views.users_schema import UserSchema
 from app.models.users_model import usersCollection
 from app.models.bcrypt_model import bcrypt_manager
 from app.exceptions import DuplicateUserException, ModelInDbException
 
 def test_save_user(_user):
     user_id = usersCollection.create_user(_user)
+    assert user_id
 
 def test_save_duplicate_user(_user):
 

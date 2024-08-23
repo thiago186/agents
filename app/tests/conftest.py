@@ -66,7 +66,6 @@ def _organization(_api_key):
     return OrganizationSchema(
         id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7',
         organization_name='Test Organization',
-        organization_role=OrganizationRoles.admin,
         api_keys=[_api_key],
         members={'e6c56ca5-e695-4325-a9a7-29a96d2fc4e7': OrganizationRoles.admin.value},
         owner_id='e6c56ca5-e695-4325-a9a7-29a96d2fc4e7'
