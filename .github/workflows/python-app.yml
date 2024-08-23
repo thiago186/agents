@@ -5,10 +5,8 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   build:
     name: Build and Test
@@ -29,10 +27,15 @@ jobs:
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
+    - name: Set environment variables
+      run: |
+        # Exporta todas as variáveis de ambiente (vars)
+        echo "${{ toJson(vars) }}" | jq -r 'to_entries[] | "echo \(.key)=\(.value) >> $GITHUB_ENV"' | sh
+        
+        # Exporta todos os secrets
+        echo "${{ toJson(secrets) }}" | jq -r 'to_entries[] | "echo \(.key)=\(.value) >> $GITHUB_ENV"' | sh
+    
     - name: Test with pytest
-      env:
-        ${{ toJson(secrets) }}
-        ${{ toJson(vars) }}
       run: |
         cd app
         pytest -v
