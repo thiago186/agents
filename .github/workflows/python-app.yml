@@ -31,8 +31,8 @@ jobs:
     
     - name: Test with pytest
       env:
-        ${{ secrets }}
-        ${{ vars }}
+        ${{ toJson(secrets) }}
+        ${{ toJson(vars) }}
       run: |
         cd app
         pytest -v
